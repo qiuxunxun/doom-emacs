@@ -204,7 +204,7 @@ This is the doom's built-in packages
 
 * =packages.el=
 This is the package I should install by myself.
-#+begin_src emacs-lisp ./packages.el
+#+begin_src emacs-lisp :tangle ./packages.el
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
@@ -255,7 +255,6 @@ This is the package I should install by myself.
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
-(package! org-super-agenda)
 
 #+end_src
 
@@ -270,8 +269,8 @@ This is almost all of my private configs
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "hsun"
+      user-mail-address "qiuxunxun@yahoo.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -338,5 +337,13 @@ This is almost all of my private configs
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+#+end_src
+
+** UI config
+*** open blink cursor
+#+begin_src emacs-lisp
+
+(blink-cursor-mode t)
 
 #+end_src
