@@ -27,7 +27,7 @@ This is the doom's built-in packages
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       company           ; the ultimate code completion backend
+       ;;company           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -102,7 +102,7 @@ This is the doom's built-in packages
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        ;;lsp               ; M-x vscode
-       magit             ; a git porcelain for Emacs
+       ;;magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
@@ -197,14 +197,21 @@ This is the doom's built-in packages
 
        :config
        ;;literate
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
+       :private
+       ;; my private evil config
+       evil
+       ;; my-ui
+       my-ui
+      ;; auto-save
+       auto-save
 
-
+       )
 #+end_src
 
 * =packages.el=
 This is the package I should install by myself.
-#+begin_src emacs-lisp :tangle ./packages.el
+#+begin_src emacs-lisp ./packages.el
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
@@ -340,10 +347,50 @@ This is almost all of my private configs
 
 #+end_src
 
-** UI config
-*** open blink cursor
-#+begin_src emacs-lisp
+* Private Evil configuration
+#+begin_src emacs-lisp :tangle modules/private/evil/config.el :mkdirp yes 
+(use-package! evil
+  :config
+  (map! :map evil-insert-state-map
+        :desc "next-line" "C-n" 'evil-next-line)
 
-(blink-cursor-mode t)
+  (map! :map evil-insert-state-map
+        :desc "previous-line" "C-p" 'evil-previous-line)
+  (map! :map evil-insert-state-map
+       :desc "save-buffer" "C-x C-s" 'save-buffer)
+  )
+#+end_src
 
+* UI module
+** open blink cursor
+#+begin_src emacs-lisp :tangle modules/private/my-ui/config.el :mkdirp yes
+
+(blink-cursor-mode 1)
+
+#+end_src
+
+* Auto save file
+** install package
+#+begin_src emacs-lisp :tangle modules/private/auto-save/packages.el :mkdirp yes
+  (package! auto-save :recipe (:host github :repo "manateelazycat/auto-save"))
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle modules/private/auto-save/config.el :mkdirp yes
+  (use-package! auto-save
+    ;;:demand
+    ;;:straight (:repo "manateelazycat/auto-save" :host github)
+    :config
+    (auto-save-enable)
+    (setq auto-save-silent t)   ; quietly save
+    (setq auto-save-delete-trailing-whitespace t)  ; automatically delete spaces at the end of the line when saving
+
+    ;;; custom predicates if you don't want auto save.
+    ;;; disable auto save mode when current filetype is an gpg file.
+    (setq auto-save-disable-predicates
+          '((lambda ()
+              (string-suffix-p
+               "gpg"
+               (file-name-extension (buffer-name)) t))))
+   )
 #+end_src
